@@ -1,0 +1,6 @@
+train: dataset/train/images  # train images (relative to 'path') 4 images
+val: dataset/val/images  # val images (relative to 'path') 4 images
+
+nc: 1
+#
+names: ['Carton']

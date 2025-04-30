@@ -1,9 +1,36 @@
+import argparse
 from ultralytics import YOLO
-import torch
-# Load a model
-# pip install -U ultralytics 
-model = YOLO("yolo11s-seg.pt")  
-model.train(data="data.yaml",cos_lr=True, epochs=500,imgsz=512,resume=False,pretrained=True,augment=True,
-            batch=56,overlap_mask=True,patience=15,cache=True,optimizer='auto',plots=True,exist_ok=True,scale=0.5,
-            name='Carton-seg-s')
+
+def main():
+    parser = argparse.ArgumentParser(description="Train YOLO segmentation model")
+    parser.add_argument('--data', type=str, required=True, help='Path to data.yaml')
+    parser.add_argument('--model', type=str, required=True, help='Path to YOLO model .pt file')
+    parser.add_argument('--epochs', type=int, default=200, help='Number of training epochs')
+    parser.add_argument('--imgsz', type=int, default=512, help='Image size for training')
+    parser.add_argument('--batch', type=int, default=16, help='Batch size')
+    parser.add_argument('--name', type=str, default='Carton-seg-s', help='Run name')
+
+    args = parser.parse_args()
+
+    model = YOLO(args.model)
+    model.train(
+        data=args.data,
+        cos_lr=True,
+        epochs=args.epochs,
+        imgsz=args.imgsz,
+        pretrained=True,
+        augment=True,
+        batch=args.batch,
+        overlap_mask=True,
+        patience=15,
+        cache=True,
+        optimizer='auto',
+        plots=True,
+        exist_ok=True,
+        scale=0.5,
+        name=args.name
+    )
+
+if __name__ == "__main__":
+    main()
 

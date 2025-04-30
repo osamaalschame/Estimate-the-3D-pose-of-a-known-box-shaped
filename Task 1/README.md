@@ -36,7 +36,7 @@ This implements a robust pipeline to estimate the pose (translation and orientat
 
 - **Dominant Planar Surface**: The method assumes the box has a dominant planar surface (e.g., the top face) facing the camera, which RANSAC can reliably fit. This assumption may not hold for 3D boxes with multiple visible faces.
 - **Depth Range**: The box is assumed to be within 2.0m to 3.0m from the camera, based on the depth map statistics (mean depth ~2.7m).
-- **Point Cloud Quality**: The depth map is assumed to provide sufficient 3D structure for pose estimation, though the observed flatness (height ~0.017m in Method 1) suggests potential noise or occlusion issues.
+- **Point Cloud Quality**: The depth map is assumed to provide sufficient 3D structure for pose estimation, though the observed flatness suggests potential noise or occlusion issues.
 - **Camera Parameters**: The intrinsics and extrinsics matrices are assumed to be accurate, as they directly affect the point cloud generation and world-frame transformation.
 
 ## Results

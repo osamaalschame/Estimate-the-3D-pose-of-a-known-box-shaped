@@ -1,0 +1,7 @@
+numpy
+opencv-python
+torch
+matplotlib
+open3d
+ultralytics
+random

@@ -1,35 +1,49 @@
-from ultralytics import YOLO
+import argparse
+import os
 import cv2
 import numpy as np
 import random
-import os
+from ultralytics import YOLO
 
-# load model 
-model = YOLO('training/Carton-seg-s/weights/best.pt')
+def visualize_prediction(model_path, image_path):
+    # Load model
+    model = YOLO(model_path)
 
-load_img = cv2.imread('training/test/net (9125).jpg')
+    # Load image
+    load_img = cv2.imread(image_path)
+    if load_img is None:
+        raise ValueError(f"Image not found or invalid: {image_path}")
 
-os.makedirs('visualization', exist_ok=True)
-# 
-results = model.predict(source=load_img,conf = 0.6)
-# Make a copy of the original image to blend overlays later
-overlay = load_img.copy()
+    # Ensure output directory exists
+    os.makedirs('visualization', exist_ok=True)
 
-# Draw filled random color per instance
-for i in range(len(results[0].boxes.cls.numpy())):
-    segment = (results[0].masks.xy)[i]
-    arr = np.array(segment, dtype=np.int32)
-    arr = arr.reshape((-1, 1, 2))
-    
-    # Generate a random color (in BGR)
-    color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-    
-    # Fill polygon on overlay image
-    cv2.fillPoly(overlay, [arr], color)
+    # Run prediction
+    results = model.predict(source=load_img, conf=0.6)
+    overlay = load_img.copy()
 
-# Blend the overlay with the original image
-alpha = 0.5  
-output = cv2.addWeighted(overlay, alpha, load_img, 1 - alpha, 0)
+    # Draw masks
+    for i in range(len(results[0].boxes.cls.numpy())):
+        segment = (results[0].masks.xy)[i]
+        arr = np.array(segment, dtype=np.int32).reshape((-1, 1, 2))
+        color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+        cv2.fillPoly(overlay, [arr], color)
 
-# Save the final image
-cv2.imwrite("visualization/image_3.jpg", output)
+    # Blend overlays
+    alpha = 0.5
+    output = cv2.addWeighted(overlay, alpha, load_img, 1 - alpha, 0)
+
+    # Generate output path
+    image_name = os.path.basename(image_path)
+    save_path = os.path.join("visualization", image_name)
+
+    # Save image
+    cv2.imwrite(save_path, output)
+    print(f"Saved visualization to {save_path}")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="YOLO Segmentation Visualizer")
+    parser.add_argument("--model", required=True, help="Path to YOLO model")
+    parser.add_argument("--image", required=True, help="Path to input image")
+    args = parser.parse_args()
+
+    visualize_prediction(args.model, args.image)

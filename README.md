@@ -26,9 +26,6 @@ venv\Scripts\activate      # On Windows
 ```bash
 pip install -r requirements.txt
 ```
-
-> **Note**: A `requirements.txt` file should include key libraries such as `numpy`, `opencv-python`, `torch`, `matplotlib`, etc., based on the task needs.
-
 ---
 
 ## 📁 Repository Structure
@@ -58,7 +55,7 @@ pip install -r requirements.txt
 ## 📌 Task Details
 
 ### Task 1: 3D Pose Estimation
-- **Input**: Depth map of a scene.
+- **Input**: Extrinsics, intrinsics, one-box-color and depth map of a scene, .
 - **Output**: 3D position and orientation (pose) of a known box-shaped object.
 - **Script**: `translate.py` reads depth maps, processes them, and estimates the pose.
 

@@ -45,6 +45,7 @@ pip install -r requirements.txt
 |   ├── dataset/               # put the dataset in this folder OSCD dataset  
 |   ├── data.yaml/             # contains the directory for train and val images,num_classes
 │   └── performance_report.pdf # Final performance report of the model
+│   └── README.md.             # Report training setup: model architecture, loss function,lr
 │
 ├── README.md                  # This readme file
 └── requirements.txt           # List of required Python libraries

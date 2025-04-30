@@ -36,14 +36,17 @@ pip install -r requirements.txt
 ```
 .
 ├── Task1/
-│   ├── data/                 # Provided depth maps and related data
+│   ├── data/                  # Provided depth maps and related data
 │   └── translate.py           # Code to estimate 3D pose from depth map
+|   └── README.md              # Approach implementation
 │
 ├── Task2/
 │   ├── train.py               # Training script for segmentation model
-│   ├── test.py                # Evaluation script
+│   ├── test.py                # test the model
 │   ├── visualization/         # Folder for saving visual outputs
 │   ├── training/              # Saved model weights, checkpoints
+|   ├── dataset/               # put the dataset in this folder OSCD dataset  
+|   ├── data.yaml/             # contains the directory for train and val images,num_classes
 │   └── performance_report.pdf # Final performance report of the model
 │
 ├── README.md                  # This readme file
@@ -80,21 +83,10 @@ python translate.py
 ### For Task 2:
 ```bash
 cd Task2
-python train.py   # To train the model
-python test.py    # To evaluate the model
-```
-
----
-
-## 📋 Requirements Summary
-Example `requirements.txt` could look like:
-```
-numpy
-opencv-python
-torch
-torchvision
-matplotlib
-scikit-learn
+python train.py --data data.yaml --model yolo11s-seg.pt --epochs 200 --imgsz 512 --batch 16 --name Carton-seg-s
+   # To train the model
+python test.py --model training/Carton-seg-s/weights/best.pt --image dataset/test/net\ \(9125\).jpg
+    # To evaluate the model
 ```
 
 ---

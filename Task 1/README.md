@@ -5,10 +5,7 @@
 This implements a robust pipeline to estimate the pose (translation and orientation) of a box-shaped object from a depth map, color image, camera intrinsics, and extrinsics using geometric methods. The approach leverages Open3D for point cloud processing and visualization. The key steps are as follows:
 
 1. **Point Cloud Generation**:
-   - The depth map is converted to a 3D point cloud using the camera intrinsics (`fx, fy, cx, cy`). Each pixel \((u, v)\) with depth \(z\) is projected to 3D coordinates:
-     \[
-     x = \frac{(u - c_x) \cdot z}{f_x}, \quad y = \frac{(v - c_y) \cdot z}{f_y}, \quad z = z
-     \]
+   - The depth map is converted to a 3D point cloud using the camera intrinsics (`fx, fy, cx, cy`). Each pixel \((u, v)\) with depth \(z\) is projected to 3D coordinates.
    - The color image is aligned with the depth map, and points are colored accordingly.
 
 2. **Outlier Rejection**:
@@ -28,7 +25,7 @@ This implements a robust pipeline to estimate the pose (translation and orientat
    - The pose is represented as a 4x4 transformation matrix \(T_{\text{camera}}\).
 
 5. **World Frame Transformation**:
-   - The camera-frame pose is transformed to the world frame using the extrinsics matrix: \(T_{\text{world}} = T_{\text{extrinsic}} \cdot T_{\text{camera}}\).
+   - The camera-frame pose is transformed to the world frame using the extrinsics matrix.
 
 6. **Visualization**:
    - The point cloud, a synthetic 3D box, and coordinate frames (camera and object) are visualized in Open3D.
@@ -72,13 +69,7 @@ The method was applied to the provided dataset (`one-box.depth.npdata.npy`, `one
   - Translation: `[-326.234939, 1112.54912, 1724.02569]`, consistent with the extrinsics and previous results.
   - Z-axis: Nearly `[0, 0, -1]`, as expected given the extrinsics.
 
-- **Comparison with Method 1**:
-  - Method 1 (oriented bounding box) produced a similar z-translation (`2.7528717m`) but a very flat bounding box (`height=0.017m`), suggesting either a depth map issue or a flat object.
-  - Method 2’s plane-fitting approach better handles the apparent planarity, producing a more robust orientation using PCA, though its axis-aligned box dimensions (`height=0.874m`) were overestimated. The updated code uses oriented dimensions for accuracy.
-
 ## Visualizations
-
-The visualization is a critical component of Method 2, ensuring the estimated pose and point cloud are correctly represented in Open3D. The process is staged to facilitate debugging and validation:
 
 1. **Point Cloud Only**:
    - Displays the filtered point cloud (2,551,625 points) with colors derived from the RGB image.
@@ -96,9 +87,9 @@ The visualization is a critical component of Method 2, ensuring the estimated po
    - This stage validates the relative pose between the camera and the object, confirming the accuracy of the transformation matrices.
 
 **Visualization Robustness**:
-- Unlike Method 1, which failed to render the bounding box (likely due to its degenerate height of 0.017m), Method 2 successfully visualizes all components, addressing previous rendering issues by dynamically adjusting the viewpoint and using a synthetic box with non-degenerate dimensions.
+- This approach successfully visualizes all components, addressing previous rendering issues by dynamically adjusting the viewpoint and using a synthetic box with non-degenerate dimensions.
 - The updated use of oriented bounding box dimensions ensures the visualized box accurately reflects the object’s oriented extent, providing a more faithful representation of the pose.
 
 ## Conclusion
 
-Method 2 provides a robust and effective approach for estimating the 6-DoF pose of a box-shaped object, particularly when the object has a dominant planar surface. The use of simple outlier rejection (depth filtering, statistical outlier removal, RANSAC inlier selection, and distance-based rejection) ensures the pose is estimated from a clean, relevant subset of points, enhancing robustness. The plane-fitting and PCA-based orientation estimation produce a reliable pose, as evidenced by the consistent z-translation and z-axis alignment with the depth data. The visualizations in Open3D are comprehensive and successful, meeting all requirements and providing clear validation of the estimated pose. Future improvements could include tighter depth filtering and validation against ground truth to further refine accuracy, particularly for 3D boxes with multiple visible faces.
+This approach provides a robust and effective approach for estimating the pose of a box-shaped object, particularly when the object has a dominant planar surface. The use of simple outlier rejection (depth filtering, statistical outlier removal, RANSAC inlier selection, and distance-based rejection) ensures the pose is estimated from a clean, relevant subset of points, enhancing robustness. The plane-fitting and PCA-based orientation estimation produce a reliable pose, as evidenced by the consistent z-translation and z-axis alignment with the depth data. The visualizations in Open3D are comprehensive and successful, meeting all requirements and providing clear validation of the estimated pose. Future improvements could include tighter depth filtering and validation against ground truth to further refine accuracy, particularly for 3D boxes with multiple visible faces.

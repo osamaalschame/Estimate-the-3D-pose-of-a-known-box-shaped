@@ -41,7 +41,7 @@ def visualize_prediction(model_path, image_path):
     print(f"Saved visualization to {save_path}")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="YOLO Segmentation Visualizer")
+    parser = argparse.ArgumentParser(description="YOLO Segmentation")
     parser.add_argument("--model", required=True, help="Path to YOLO model")
     parser.add_argument("--image", required=True, help="Path to input image")
     args = parser.parse_args()

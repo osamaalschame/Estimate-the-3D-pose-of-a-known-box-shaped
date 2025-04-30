@@ -9,6 +9,7 @@ def main():
     parser.add_argument('--imgsz', type=int, default=512, help='Image size for training')
     parser.add_argument('--batch', type=int, default=16, help='Batch size')
     parser.add_argument('--name', type=str, default='Carton-seg-s', help='Run name')
+    parser.add_argument('--patience', type=int, default=15, help='Early stopping patience')
 
     args = parser.parse_args()
 
@@ -22,7 +23,7 @@ def main():
         augment=True,
         batch=args.batch,
         overlap_mask=True,
-        patience=15,
+        patience=args.patience,
         cache=True,
         optimizer='auto',
         plots=True,

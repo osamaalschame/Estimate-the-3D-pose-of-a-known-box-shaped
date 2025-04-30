@@ -81,7 +81,7 @@ python translate.py
 ### For Task 2:
 ```bash
 cd Task2
-python train.py --data data.yaml --model yolo11s-seg.pt --epochs 200 --imgsz 512 --batch 16 --name Carton-seg-s
+python train.py --data data.yaml --model yolo11s-seg.pt --epochs 200 --imgsz 512 --batch 16 --name Carton-seg-s --patience 15
    # To train the model
 python test.py --model training/Carton-seg-s/weights/best.pt --image dataset/test/net\ \(9125\).jpg
     # To evaluate the model
